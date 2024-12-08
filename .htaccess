@@ -7,6 +7,7 @@ RewriteRule ^$ index.php [QSA,L]
 RewriteRule ^home$ index.php [QSA,L]
 
 RewriteRule ^product_detail$ product_detail.php [QSA,L]
+RewriteRule ^search$ search.php [QSA,L]
 
 RewriteRule ^cart$ customer/cart.php [QSA,L]
 RewriteRule ^addcart$ customer/add_cart.php [QSA,L]

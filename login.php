@@ -6,7 +6,7 @@ include('./includes/db.php');
 
 // Kiểm tra nếu người dùng đã đăng nhập rồi, chuyển hướng đến trang chủ
 if (isset($_SESSION['user_id'])) {
-    header('Location: index.php');
+    header('Location: home');
     exit();
 }
 
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php endif; ?>
 
     <!-- Form đăng nhập -->
-    <form method="POST" action="login.php">
+    <form method="POST" action="login">
         <div class="mb-3">
             <label for="username" class="form-label">Tên đăng nhập hoặc Email</label>
             <input type="text" class="form-control" id="username" name="username" required>
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
 
     <div class="mt-3">
-        <p>Chưa có tài khoản? <a href="register.php">Đăng ký</a></p>
+        <p>Chưa có tài khoản? <a href="register">Đăng ký</a></p>
     </div>
 </div>
 
