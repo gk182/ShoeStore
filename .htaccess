@@ -21,7 +21,7 @@ RewriteRule ^login$ login.php [QSA,L]
 RewriteRule ^register$ register.php [QSA,L]
 RewriteRule ^logout$ logout.php [QSA,L]
 
-RewriteRule ^staff$ staff/dashboard.php [QSA,L]
+RewriteRule ^staff$ admin/index.php [QSA,L]
 
 # Nếu không tìm thấy route, trả về lỗi 404
 ErrorDocument 404 /index.php

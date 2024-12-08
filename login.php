@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Chuyển hướng người dùng đến trang chủ hoặc trang nhân viên
             if ($user['role'] == 'staff') {
-                header('Location: admin/aa.php');
+                header('Location: staff');
             } else {
                 header('Location: index.php');
             }
