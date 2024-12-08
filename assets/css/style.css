@@ -1,0 +1,72 @@
+/* Thiết lập row với flex để đảm bảo các cột có chiều cao bằng nhau */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Đảm bảo các cột có chiều cao bằng nhau */
+.col-md-4 {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Cột sẽ có chiều cao 100% của dòng chứa */
+}
+
+/* Giữ cho ảnh có tỷ lệ cover đúng */
+.product__image {
+    width: 100%;
+    height: 200px; /* Hoặc height: fit-content; nếu bạn muốn ảnh thay đổi theo nội dung */
+    object-fit: cover;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Đảm bảo card body luôn chiếm hết không gian còn lại */
+.card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(25% - 20px);
+    height: 450px;
+    position: relative;
+}
+
+.product__image {
+    width: 100%;
+    height: fit-content; /* Điều chỉnh chiều cao tùy ý */
+    object-fit: cover; /* Cắt ảnh để bao phủ toàn bộ vùng chứa */
+    background-size: cover; /* Đảm bảo ảnh không bị bóp méo khi thay đổi kích thước */
+    background-position: center; /* Đảm bảo phần trung tâm của ảnh được hiển thị */
+    text-align: center;
+}
+/* Chỉnh kích thước nút */
+.btn-sm {
+    padding: 4px 8px; /* Kích thước nhỏ gọn */
+    font-size: 14px; /* Giữ phông chữ vừa phải */
+    width: 30px; /* Chiều rộng cố định */
+    height: 30px; /* Chiều cao cố định */
+    line-height: 22px; /* Căn chữ ở giữa nút */
+    text-align: center;
+    border-radius: 4px; /* Bo góc mềm mại */
+}
+
+/* Khoảng cách giữa các nút và số lượng */
+.quantity-display {
+    display: inline-block;
+    width: 40px; /* Đảm bảo hiển thị số lượng đẹp */
+    text-align: center;
+    font-size: 16px; /* Cỡ chữ lớn hơn để dễ đọc */
+    margin: 0 5px; /* Khoảng cách giữa số lượng và nút */
+}
+
+/* Đảm bảo nút không bị lỗi kích thước khi hover */
+.btn-sm:hover {
+    background-color: #5a6268; /* Màu xám đậm khi hover */
+    color: white; /* Màu chữ trắng */
+}

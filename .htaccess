@@ -1,0 +1,27 @@
+RewriteEngine On
+RewriteBase /project1/
+
+# Điều hướng các URL đẹp về file index.php
+RewriteRule ^$ index.php [QSA,L]
+
+RewriteRule ^home$ index.php [QSA,L]
+
+RewriteRule ^product_detail$ product_detail.php [QSA,L]
+
+RewriteRule ^cart$ customer/cart.php [QSA,L]
+RewriteRule ^addcart$ customer/add_cart.php [QSA,L]
+RewriteRule ^removecart$ customer/remove_from_cart.php [QSA,L]
+RewriteRule ^updatecart$ customer/update_cart.php [QSA,L]
+
+RewriteRule ^order_history$ customer/order_history.php [QSA,L]
+RewriteRule ^checkout$ customer/checkout.php [QSA,L]
+RewriteRule ^order_success$ customer/order_success.php [QSA,L]
+
+RewriteRule ^login$ login.php [QSA,L]
+RewriteRule ^register$ register.php [QSA,L]
+RewriteRule ^logout$ logout.php [QSA,L]
+
+RewriteRule ^staff$ staff/dashboard.php [QSA,L]
+
+# Nếu không tìm thấy route, trả về lỗi 404
+ErrorDocument 404 /index.php
