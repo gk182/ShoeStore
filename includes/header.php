@@ -92,7 +92,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
     <!-- Nội dung chính của trang -->
     <!-- Thêm các phần content khác tại đây -->
-</body>
+
 
 <!-- Liên kết Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

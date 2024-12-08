@@ -2,7 +2,7 @@
 include './includes/db.php';
 
 // Số lượng sản phẩm hiển thị mỗi trang
-$items_per_page = 9;
+$items_per_page = 12;
 
 // Xác định trang hiện tại, nếu không có trang sẽ mặc định là 1
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -25,13 +25,12 @@ $total_pages = ceil($total_items / $items_per_page);
 <div class="container mt-4">
     <div class="row">
         <?php while ($row = $result->fetch_assoc()): ?>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3 mb-4"> <!-- Hiển thị 4 sản phẩm mỗi hàng -->
                 <div class="card">
-                    <img src="assets/images/<?= $row['image_url']; ?>" class="card-img-top" alt="<?= $row['product_name']; ?>">
+                    <img src="assets/images/<?= $row['image_url']; ?>" class="card-img-top"
+                        alt="<?= $row['product_name']; ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= $row['product_name']; ?></h5>
-                        <!-- Loại bỏ mô tả -->
-                        <!-- <p class="card-text"><?= $row['description']; ?></p> -->
                         <p class="card-text"><strong><?= number_format($row['price'], 0, ',', '.'); ?> VNĐ</strong></p>
                         <a href="product_detail?id=<?= $row['product_id']; ?>" class="btn btn-primary">Xem chi tiết</a>
                     </div>

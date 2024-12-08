@@ -42,11 +42,36 @@ $product = $result->fetch_assoc();
                         <button type="button" class="btn btn-secondary btn-sm" id="increase-quantity">+</button>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+                <?php else: ?>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        Thêm vào giỏ hàng
+                    </button>
+                <?php endif; ?>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Modal Thông báo -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn chưa đăng nhập, hãy <a href="login">đăng nhập ngay</a> để chọn những đôi giày chất lượng nhất nhé!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     // Lấy các phần tử DOM

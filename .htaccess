@@ -17,6 +17,7 @@ RewriteRule ^updatecart$ customer/update_cart.php [QSA,L]
 RewriteRule ^order_history$ customer/order_history.php [QSA,L]
 RewriteRule ^checkout$ customer/checkout.php [QSA,L]
 RewriteRule ^order_success$ customer/order_success.php [QSA,L]
+RewriteRule ^order_detail$ customer/order_detail.php [QSA,L]
 
 RewriteRule ^login$ login.php [QSA,L]
 RewriteRule ^register$ register.php [QSA,L]

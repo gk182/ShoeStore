@@ -25,7 +25,8 @@ if ($cart_result->num_rows == 0) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $address = $_POST['address'];
     $phone = $_POST['phone'];
-    
+    $fullname = $_POST['fullname'];
+
     // Tính tổng giá trị đơn hàng
     $total_price = 0;
     while ($cart_row = $cart_result->fetch_assoc()) {
@@ -36,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->begin_transaction();
     try {
         // Thêm đơn hàng vào bảng `order`
-        $sql_order = "INSERT INTO `order` (user_id, total_price, address, phone, status) 
-                      VALUES ($user_id, $total_price, '$address', '$phone', 'Pending')";
+        $sql_order = "INSERT INTO `order` (user_id, total_price, address, phone, status, fullname) 
+                      VALUES ($user_id, $total_price, '$address', '$phone', 'Chưa xác thực', '$fullname')";
         $conn->query($sql_order);
         $order_id = $conn->insert_id; // Lấy ID đơn hàng mới
 
@@ -74,6 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div class="container mt-4">
     <h1>Thanh toán</h1>
     <form method="POST">
+        <div class="mb-3">
+            <label for="fullname" class="form-label">Họ và tên</label>
+            <input type="text" name="fullname" id="fullname" class="form-control" required>
+        </div>
         <div class="mb-3">
             <label for="address" class="form-label">Địa chỉ</label>
             <input type="text" name="address" id="address" class="form-control" required>

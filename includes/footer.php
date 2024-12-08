@@ -1,3 +1,4 @@
+</body>
 <footer class="bg-dark text-white py-5">
     <div class="container">
         <!-- Thông tin chung -->

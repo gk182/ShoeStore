@@ -1,13 +1,15 @@
 <?php
 include '../includes/db.php';
 include '../includes/header.php';
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
 $user_id = $_SESSION['user_id'];
 
 // Lấy lịch sử đơn hàng
-$sql = "SELECT * FROM `order` WHERE user_id = $user_id";
+$sql = "SELECT * FROM `order` WHERE user_id = $user_id ORDER BY order_date DESC";
 $result = $conn->query($sql);
 ?>
 
@@ -21,6 +23,7 @@ $result = $conn->query($sql);
                     <th>Ngày đặt</th>
                     <th>Tổng tiền</th>
                     <th>Trạng thái</th>
+                    <th>Chi tiết</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +32,10 @@ $result = $conn->query($sql);
                         <td><?= $row['order_id']; ?></td>
                         <td><?= $row['order_date']; ?></td>
                         <td><?= number_format($row['total_price'], 0, ',', '.'); ?> VNĐ</td>
-                        <td><?= $row['status']; ?></td>
+                        <td><?= ucfirst($row['status']); ?></td>
+                        <td>
+                            <a href="order_detail?order_id=<?= $row['order_id']; ?>" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                        </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

@@ -33,40 +33,41 @@ $result = $conn->query($sql);
 ?>
 
 <div class="container mt-4">
-    <h1>Giỏ hàng của bạn</h1>
+    <h1 class="text-center mb-4">Giỏ hàng của bạn</h1>
     <?php if ($result->num_rows > 0): ?>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Hình ảnh</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Kích thước</th> <!-- Thêm cột kích thước -->
-                    <th>Số lượng</th>
-                    <th>Giá</th>
-                    <th>Tổng cộng</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $grand_total = 0; // Tổng số tiền của giỏ hàng
-                while ($row = $result->fetch_assoc()):
-                    $total_price = $row['quantity'] * $row['price'];
-                    $grand_total += $total_price;
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Kích thước</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Tổng cộng</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $grand_total = 0; // Tổng số tiền của giỏ hàng
+                    while ($row = $result->fetch_assoc()):
+                        $total_price = $row['quantity'] * $row['price'];
+                        $grand_total += $total_price;
                     ?>
                     <tr>
-                        <td><img src="../assets/images/<?= $row['image_url']; ?>" alt="<?= $row['product_name']; ?>"
-                                style="width: 120px; height: auto;"></td>
+                        <td><img src="./assets/images/<?= $row['image_url']; ?>" alt="<?= $row['product_name']; ?>"
+                                 class="img-fluid" style="max-width: 120px;"></td>
                         <td><?= $row['product_name']; ?></td>
-                        <td><?= $row['size']; ?></td> <!-- Hiển thị kích thước -->
+                        <td><?= $row['size']; ?></td>
                         <td>
                             <form method="POST" action="updatecart" class="d-inline">
                                 <input type="hidden" name="cart_id" value="<?= $row['cart_id']; ?>">
                                 <input type="hidden" name="product_id" value="<?= $row['product_id']; ?>">
                                 <input type="hidden" name="size_id" value="<?= $row['size_id']; ?>">
-                                <button type="submit" name="decrease" class="btn btn-secondary btn-sm">-</button>
+                                <button type="submit" name="decrease" class="btn btn-outline-secondary btn-sm">-</button>
                                 <span class="quantity-display"><?= $row['quantity']; ?></span>
-                                <button type="submit" name="increase" class="btn btn-secondary btn-sm">+</button>
+                                <button type="submit" name="increase" class="btn btn-outline-secondary btn-sm">+</button>
                             </form>
                         </td>
                         <td><?= number_format($row['price'], 0, ',', '.'); ?> VNĐ</td>
@@ -76,24 +77,30 @@ $result = $conn->query($sql);
                                 <input type="hidden" name="cart_id" value="<?= $row['cart_id']; ?>">
                                 <input type="hidden" name="product_id" value="<?= $row['product_id']; ?>">
                                 <input type="hidden" name="size_id" value="<?= $row['size_id']; ?>">
-                                <button type="submit" class="btn btn-danger">Xóa</button>
+                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                             </form>
                         </td>
                     </tr>
-                <?php endwhile; ?>
-                <tr>
-                    <td colspan="5" class="text-end"><strong>Tổng cộng:</strong></td>
-                    <td><strong><?= number_format($grand_total, 0, ',', '.'); ?> VNĐ</strong></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-        <a href="checkout" class="btn btn-success">Thanh toán</a>
+                    <?php endwhile; ?>
+                    <tr>
+                        <td colspan="5" class="text-end"><strong>Tổng cộng:</strong></td>
+                        <td><strong><?= number_format($grand_total, 0, ',', '.'); ?> VNĐ</strong></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <a href="checkout" class="btn btn-success btn-lg">Thanh toán</a>
+        </div>
     <?php else: ?>
-        <p>Giỏ hàng trống!</p>
+        <div class="alert alert-light text-center">
+            <h4 class="alert-heading">Giỏ hàng trống!</h4>
+            <p>Giỏ hàng của bạn hiện tại không có sản phẩm. Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.</p>
+            <hr>
+            <p class="mb-0"><a href="home" class="btn btn-outline-dark">Hãy chọn sản phẩm</a> ngay bây giờ!</p>
+        </div>
     <?php endif; ?>
 </div>
-
-
 
 <?php include '../includes/footer.php'; ?>

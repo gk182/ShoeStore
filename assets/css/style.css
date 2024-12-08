@@ -1,72 +1,52 @@
-/* Thiết lập row với flex để đảm bảo các cột có chiều cao bằng nhau */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-}
 
-/* Đảm bảo các cột có chiều cao bằng nhau */
-.col-md-4 {
+.card {
+    width: 100%; /* Hoặc chiều rộng cố định */
+    height: 400px; /* Chiều cao cố định cho card */
     display: flex;
     flex-direction: column;
-    height: 100%; /* Cột sẽ có chiều cao 100% của dòng chứa */
+}
+.card-img-top {
+    width: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều ngang */
+    height: 200px; /* Chiều cao cố định */
+    object-fit: contain; /* Đảm bảo ảnh không bị méo, nhưng có thể thêm padding */
 }
 
-/* Giữ cho ảnh có tỷ lệ cover đúng */
-.product__image {
-    width: 100%;
-    height: 200px; /* Hoặc height: fit-content; nếu bạn muốn ảnh thay đổi theo nội dung */
-    object-fit: cover;
-    background-size: cover;
-    background-position: center;
-}
 
-/* Đảm bảo card body luôn chiếm hết không gian còn lại */
 .card-body {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    flex-grow: 1; /* Cho phép nội dung trong body chiếm không gian còn lại */
+}
+.card-title, .card-text {
+    overflow: hidden;
+    text-overflow: ellipsis; /* Thêm dấu "..." cho nội dung dài */
+    white-space: nowrap; /* Không cho phép xuống dòng */
+}
+/* Hiệu ứng phóng to ảnh khi di chuột */
+.card:hover {
+    transform: translateY(-10px); /* Di chuyển card lên một chút */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Tạo bóng cho card */
+    transition: all 0.3s ease-in-out; /* Tạo hiệu ứng chuyển động mượt mà */
 }
 
-.product {
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: calc(25% - 20px);
-    height: 450px;
-    position: relative;
+/* Hiệu ứng phóng to hình ảnh */
+.card-img-top {
+    transition: transform 0.3s ease-in-out;
 }
 
-.product__image {
-    width: 100%;
-    height: fit-content; /* Điều chỉnh chiều cao tùy ý */
-    object-fit: cover; /* Cắt ảnh để bao phủ toàn bộ vùng chứa */
-    background-size: cover; /* Đảm bảo ảnh không bị bóp méo khi thay đổi kích thước */
-    background-position: center; /* Đảm bảo phần trung tâm của ảnh được hiển thị */
-    text-align: center;
-}
-/* Chỉnh kích thước nút */
-.btn-sm {
-    padding: 4px 8px; /* Kích thước nhỏ gọn */
-    font-size: 14px; /* Giữ phông chữ vừa phải */
-    width: 30px; /* Chiều rộng cố định */
-    height: 30px; /* Chiều cao cố định */
-    line-height: 22px; /* Căn chữ ở giữa nút */
-    text-align: center;
-    border-radius: 4px; /* Bo góc mềm mại */
+.card:hover .card-img-top {
+    transform: scale(1.1); /* Phóng to ảnh */
 }
 
-/* Khoảng cách giữa các nút và số lượng */
-.quantity-display {
-    display: inline-block;
-    width: 40px; /* Đảm bảo hiển thị số lượng đẹp */
-    text-align: center;
-    font-size: 16px; /* Cỡ chữ lớn hơn để dễ đọc */
-    margin: 0 5px; /* Khoảng cách giữa số lượng và nút */
+/* Hiệu ứng thay đổi màu nền của nút */
+.card-body .btn:hover {
+    background-color: #0056b3; /* Màu nền khi di chuột */
+    color: white; /* Màu chữ khi di chuột */
+    transform: scale(1.05); /* Phóng to nút */
+    transition: transform 0.3s ease-in-out;
 }
 
-/* Đảm bảo nút không bị lỗi kích thước khi hover */
-.btn-sm:hover {
-    background-color: #5a6268; /* Màu xám đậm khi hover */
-    color: white; /* Màu chữ trắng */
+/* Tạo hiệu ứng đổi màu chữ khi hover */
+.card-body h5:hover {
+    color: #007bff; /* Màu chữ thay đổi khi di chuột */
+    cursor: pointer;
 }
+
