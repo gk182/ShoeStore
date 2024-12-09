@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /project1/
+RewriteBase /ShoeStore/
 
 # Điều hướng các URL đẹp về file index.php
 RewriteRule ^$ index.php [QSA,L]
@@ -23,7 +23,14 @@ RewriteRule ^login$ login.php [QSA,L]
 RewriteRule ^register$ register.php [QSA,L]
 RewriteRule ^logout$ logout.php [QSA,L]
 
-RewriteRule ^staff$ admin/index.php [QSA,L]
+RewriteRule ^list_order$ admin/list_order.php [QSA,L]
+RewriteRule ^inventory$ admin/inventory.php [QSA,L]
+RewriteRule ^manager_product$ admin/manager_product.php [QSA,L]
+RewriteRule ^create$ admin/create.php [QSA,L]
+RewriteRule ^delete$ admin/delete.php [QSA,L]
+RewriteRule ^update$ admin/update.php [QSA,L]
+
+RewriteRule ^staff$ index.php [QSA,L]
 
 # Nếu không tìm thấy route, trả về lỗi 404
 ErrorDocument 404 /index.php

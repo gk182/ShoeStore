@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2024 at 08:35 PM
+-- Generation Time: Dec 09, 2024 at 10:56 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,7 +38,7 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`cart_id`, `user_id`) VALUES
 (3, 2),
-(13, 3),
+(14, 3),
 (1, 4),
 (12, 5);
 
@@ -61,7 +61,6 @@ CREATE TABLE `cart_detail` (
 --
 
 INSERT INTO `cart_detail` (`cart_detail_id`, `cart_id`, `product_id`, `size_id`, `quantity`) VALUES
-(19, 12, 2, 7, 1),
 (20, 12, 6, 31, 1),
 (21, 12, 11, 61, 1),
 (22, 12, 11, 63, 1);
@@ -88,15 +87,9 @@ CREATE TABLE `order` (
 --
 
 INSERT INTO `order` (`order_id`, `user_id`, `order_date`, `total_price`, `status`, `fullname`, `address`, `phone`) VALUES
-(3, 3, '2024-12-08 04:59:36', 2000000.00, 'Chưa xác thực', '', 'kkkk', '0556425634'),
-(4, 3, '2024-12-08 05:02:19', 2000000.00, 'Đã xác thực', '', '123', '1111'),
-(5, 3, '2024-12-08 05:03:55', 2000000.00, 'Chưa xác thực', '', '123', '1'),
-(6, 3, '2024-12-08 05:07:37', 2500000.00, 'Đang giao', '', '123', '0556425634'),
-(7, 3, '2024-12-08 05:08:09', 2000000.00, 'Chưa xác thực', '', '1', '1'),
-(8, 3, '2024-12-08 05:11:42', 4000000.00, 'Đã giao thành công', '', 'kkkk', '1'),
-(9, 3, '2024-12-09 00:22:59', 17380000.00, 'Đang giao', '', 'kkkk', '0556425634'),
-(10, 5, '2024-12-09 01:08:20', 6690000.00, 'Đang giao', 'haizz ', '123kkk', '12315'),
-(11, 3, '2024-12-09 01:37:54', 19970000.00, 'Đã giao thành công', 'Phạm Gia Khải', 'nhà ', '01213');
+(10, 5, '2024-12-09 01:08:20', 6690000.00, 'Đã xác thực', 'haizz ', '123kkk', '12315'),
+(11, 3, '2024-12-09 01:37:54', 19970000.00, 'Đã giao thành công', 'Phạm Gia Khải', 'nhà ', '01213'),
+(12, 3, '2024-12-10 00:27:55', 6690000.00, 'Đã giao thành công', 'Lương Trang', 'Cát Bi, Hải Phòng', '0124567893');
 
 -- --------------------------------------------------------
 
@@ -118,17 +111,10 @@ CREATE TABLE `order_detail` (
 --
 
 INSERT INTO `order_detail` (`order_detail_id`, `order_id`, `product_id`, `size_id`, `quantity`, `price`) VALUES
-(4, 3, 1, 1, 1, 2000000.00),
-(5, 4, 1, 1, 1, 2000000.00),
-(6, 5, 1, 1, 1, 2000000.00),
-(7, 6, 2, 7, 1, 2500000.00),
-(8, 7, 1, 1, 1, 2000000.00),
-(9, 8, 1, 1, 2, 2000000.00),
-(10, 9, 5, 25, 2, 8690000.00),
 (11, 10, 8, 44, 1, 6690000.00),
-(12, 11, 2, 7, 1, 2500000.00),
 (13, 11, 7, 37, 1, 10090000.00),
-(14, 11, 11, 64, 2, 3690000.00);
+(14, 11, 11, 64, 2, 3690000.00),
+(15, 12, 8, 43, 1, 6690000.00);
 
 -- --------------------------------------------------------
 
@@ -150,9 +136,7 @@ CREATE TABLE `product` (
 
 INSERT INTO `product` (`product_id`, `product_name`, `price`, `description`, `image_url`) VALUES
 (1, 'Nike Air Max 1', 2000000.00, 'Nike Air Max 1 là một trong những mẫu giày thể thao nổi tiếng với đế Air Cushion giúp mang lại cảm giác êm ái, thoải mái khi di chuyển. Phù hợp cho cả chạy bộ và đi chơi.', 'giay_1733517153.jpg'),
-(2, 'Adidas Ultra Boost', 2500000.00, 'Adidas Ultra Boost với công nghệ đế Boost nổi bật giúp tăng cường độ đàn hồi, mang lại sự thoải mái tối đa cho người sử dụng, thích hợp cho các vận động viên.', 'giay_1733517153.jpg'),
-(3, 'Puma Suede', 1500000.00, 'Puma Suede có thiết kế cổ điển với chất liệu da lộn mềm mại, dễ phối đồ, tạo nên phong cách thời trang đơn giản nhưng không kém phần nổi bật.', 'puma_suede.jpg'),
-(4, 'Giày Air Jordan 1 Mid ‘Coral Chalk’ (GS) 554725-662', 4990000.00, 'Giày Air Jordan 1 Mid ‘Coral Chalk’ với thiết kế đậm chất thể thao, chất liệu da cao cấp và sự kết hợp màu sắc nổi bật, mang lại sự ấn tượng cho người sử dụng.', 'giay1.jpg'),
+(4, 'Giày Air Jordan 1 Mid ‘Coral Chalk’ (GS)', 499000.00, 'Giày Air Jordan 1 Mid ‘Coral Chalk’ với thiết kế đậm chất thể thao, chất liệu da cao cấp và sự kết hợp màu sắc nổi bật, mang lại sự ấn tượng cho người sử dụng.', 'giay_1733780818.jpg'),
 (5, 'Giày Nike Air Jordan 4 Retro ‘Bred Reimagined’ FV5029-006', 8690000.00, 'Air Jordan 4 Retro ‘Bred Reimagined’ có thiết kế mạnh mẽ, sử dụng chất liệu da tổng hợp cao cấp, đế giày bền bỉ, thích hợp cho các tín đồ yêu thích thể thao và phong cách đường phố.', 'giay2.jpg'),
 (6, 'Giày nam Dior x Air Jordan 1 High CN8607-002', 99999999.99, 'Dior x Air Jordan 1 High là sự kết hợp hoàn hảo giữa thương hiệu thời trang cao cấp Dior và Jordan, với chất liệu da sang trọng và thiết kế độc đáo, tạo nên sự đẳng cấp.', 'giay3.jpg'),
 (7, 'Giày Air Jordan 1 Mid SE ‘All Star 2021 Carbon Fiber’ (GS) DD2192-001', 10090000.00, 'Air Jordan 1 Mid SE ‘All Star 2021’ mang đến sự kết hợp giữa chất liệu sợi carbon nhẹ và phong cách hiện đại, là lựa chọn tuyệt vời cho các fan của thương hiệu Jordan.', 'giay4.jpg'),
@@ -193,24 +177,10 @@ CREATE TABLE `size` (
 --
 
 INSERT INTO `size` (`size_id`, `product_id`, `size`, `quantity`) VALUES
-(1, 1, 39, 10),
-(2, 1, 40, 10),
+(2, 1, 40, 12),
 (3, 1, 41, 10),
 (4, 1, 42, 10),
 (5, 1, 43, 10),
-(6, 1, 44, 10),
-(7, 2, 39, 10),
-(8, 2, 40, 10),
-(9, 2, 41, 10),
-(10, 2, 42, 10),
-(11, 2, 43, 10),
-(12, 2, 44, 10),
-(13, 3, 39, 10),
-(14, 3, 40, 10),
-(15, 3, 41, 10),
-(16, 3, 42, 10),
-(17, 3, 43, 10),
-(18, 3, 44, 10),
 (19, 4, 39, 10),
 (20, 4, 40, 10),
 (21, 4, 41, 10),
@@ -337,12 +307,13 @@ INSERT INTO `size` (`size_id`, `product_id`, `size`, `quantity`) VALUES
 (142, 24, 42, 10),
 (143, 24, 43, 10),
 (144, 24, 44, 10),
-(145, 25, 39, 10),
+(145, 25, 39, 11),
 (146, 25, 40, 10),
 (147, 25, 41, 10),
 (148, 25, 42, 10),
 (149, 25, 43, 10),
-(150, 25, 44, 10);
+(150, 25, 44, 10),
+(151, 1, 42, 1);
 
 -- --------------------------------------------------------
 
@@ -434,25 +405,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `cart_detail`
 --
 ALTER TABLE `cart_detail`
-  MODIFY `cart_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `cart_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `order_detail`
 --
 ALTER TABLE `order_detail`
-  MODIFY `order_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `order_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -464,7 +435,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `size`
 --
 ALTER TABLE `size`
-  MODIFY `size_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
+  MODIFY `size_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT for table `user`

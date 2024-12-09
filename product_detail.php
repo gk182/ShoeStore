@@ -43,12 +43,20 @@ $product = $result->fetch_assoc();
                     </div>
                 </div>
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'staff'): ?>
+                        <button type="button" class="btn btn-secondary"
+                            onclick="alert('Bạn không thể thêm sản phẩm vào giỏ hàng vì bạn là nhân viên!');">
+                            Thêm vào giỏ hàng
+                        </button>
+                    <?php else: ?>
+                        <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+                    <?php endif; ?>
                 <?php else: ?>
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#loginModal">
                         Thêm vào giỏ hàng
                     </button>
                 <?php endif; ?>
+
             </form>
         </div>
     </div>

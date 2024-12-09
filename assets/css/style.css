@@ -50,3 +50,14 @@
     cursor: pointer;
 }
 
+/* Điều chỉnh chiều cao của dropdown */
+.form-control-sm {
+    height: 30px; /* Giảm chiều cao */
+    font-size: 14px; /* Giảm kích thước font chữ */
+}
+
+/* Điều chỉnh viền */
+.form-control-sm {
+    border: 1px solid #ccc; /* Viền nhẹ, có thể thay đổi màu */
+    border-radius: 4px; /* Làm bo tròn góc */
+}

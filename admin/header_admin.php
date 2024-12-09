@@ -19,7 +19,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
     <!-- Liên kết CSS của bạn -->
     <link href="./assets/css/style.css" rel="stylesheet">
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
@@ -38,6 +37,17 @@ if (session_status() == PHP_SESSION_NONE) {
                         <a class="nav-link active" href="home">Trang chủ</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventory">Quản lí tồn kho</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="list_order">Quản lí đơn hàng</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="manager_product">Quản lí sản phẩm</a>
+                    </li>
 
                 </ul>
 
@@ -89,7 +99,6 @@ if (session_status() == PHP_SESSION_NONE) {
             </div>
         </div>
     </nav>
-
 
 
 

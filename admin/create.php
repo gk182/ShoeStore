@@ -1,88 +1,131 @@
 <?php
-session_start();
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: index.php");
-    exit();
-}
+include 'header_admin.php';
+// Kết nối đến cơ sở dữ liệu
+include '../includes/db.php';
 
-include '../config.php';
-
+// Kiểm tra nếu có dữ liệu gửi lên từ form
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     $name = $_POST['name'];
     $price = $_POST['price'];
+    $description = $_POST['description']; // Lấy giá trị mô tả từ form
+    $image_name = $_POST['image_name']; // Lấy tên ảnh từ form
+
+    // Kiểm tra đầu vào của tên, giá và mô tả
+    if (empty($name) || empty($price)) {
+        echo "Vui lòng nhập đầy đủ thông tin.";
+        exit();
+    }
+
+    // Kiểm tra giá có phải là số
+    if (!is_numeric($price)) {
+        echo "Giá phải là một số.";
+        exit();
+    }
+
+    // Kiểm tra nếu tên ảnh được nhập vào
+    if (empty($image_name)) {
+        echo "Vui lòng nhập tên ảnh.";
+        exit();
+    }
 
     // Xử lý upload ảnh
-    $target_dir = "../images/"; // Thư mục lưu trữ ảnh
+    $target_dir = "../assets/images/"; // Thư mục lưu trữ ảnh
+
+    // Kiểm tra nếu thư mục không tồn tại thì tạo mới
+    if (!file_exists($target_dir)) {
+        mkdir($target_dir, 0777, true);  // Tạo thư mục với quyền ghi
+    }
+
     $imageFileType = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
 
-    // Tạo tên tệp mới dựa trên thời gian hiện tại
-    $timestamp = time();
-    $new_filename = "giay_" . $timestamp . "." . $imageFileType;
+    // Tạo tên tệp mới dựa trên tên người bán
+    $new_filename = $image_name . "." . $imageFileType;
     $target_file = $target_dir . $new_filename;
 
     // Kiểm tra kích thước file (giới hạn 5MB)
     if ($_FILES["image"]["size"] > 5 * 1024 * 1024) {
-        echo "Sorry, your file is too large.";
+        echo "File quá lớn. Kích thước tối đa là 5MB.";
         exit();
     }
 
     // Cho phép chỉ các định dạng ảnh được phép
     $allowed_formats = array("jpg", "jpeg", "png", "gif");
     if (!in_array($imageFileType, $allowed_formats)) {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        echo "Chỉ cho phép các định dạng ảnh JPG, JPEG, PNG và GIF.";
         exit();
     }
 
     // Di chuyển và lưu trữ file vào thư mục
     if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-        // Lưu đường dẫn tương đối của hình ảnh vào cơ sở dữ liệu
-        $relative_path = "images/" . $new_filename;
-        $sql = "INSERT INTO products (name, price, image) VALUES ('$name', '$price', '$relative_path')";
-        if ($conn->query($sql) === TRUE) {
+        // Lưu đường dẫn tương đối của hình ảnh và mô tả vào cơ sở dữ liệu
+        $relative_path = "" . $new_filename;
+
+        // Prepared statement để tránh SQL injection
+        $stmt = $conn->prepare("INSERT INTO product (product_name, price, image_url, description) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $name, $price, $relative_path, $description);
+
+        if ($stmt->execute()) {
             header("Location: admin.php");
             exit();
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "Lỗi: " . $stmt->error;
         }
+
+        // Đóng prepared statement
+        $stmt->close();
     } else {
-        echo "Sorry, there was an error uploading your file.";
+        echo "Có lỗi khi tải lên file ảnh.";
         exit();
     }
 }
-?>
 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Shoe</title>
-    <link rel="stylesheet" href="../css/styles_admin.css">
+    <title>Thêm Giày Mới</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="admin-container">
-        <h2>Add New Shoe</h2>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Thêm Giày Mới</h2>
         <form action="create.php" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+            <div class="mb-3">
+                <label for="name" class="form-label">Tên Giày:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
             </div>
-            <div class="form-group">
-                <label for="price">Price:</label>
-                <input type="text" id="price" name="price" required>
+            <div class="mb-3">
+                <label for="price" class="form-label">Giá:</label>
+                <input type="text" id="price" name="price" class="form-control" required>
             </div>
-            <div class="form-group">
-                <label for="image">Image:</label>
-                <input type="file" id="image" name="image" accept="image/*" required>
+            <div class="mb-3">
+                <label for="description" class="form-label">Mô Tả:</label>
+                <textarea id="description" name="description" class="form-control"></textarea>
             </div>
-            <button type="submit">Add Shoe</button>
+            <div class="mb-3">
+                <label for="image_name" class="form-label">Tên Ảnh:</label>
+                <input type="text" id="image_name" name="image_name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Ảnh:</label>
+                <input type="file" id="image" name="image" class="form-control" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Thêm Giày</button>
         </form>
     </div>
+
+    <!-- Add Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 
 <?php
 $conn->close();
 ?>
+
+<?php include '../includes/footer.php'; ?>

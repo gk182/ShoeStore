@@ -1,64 +1,110 @@
 <?php
-session_start();
+include 'header_admin.php';
+include '../includes/db.php';
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: login.php");
-    exit();
-}
-
-include '../config.php';
-
+// Kiểm tra nếu có id trong URL
+$shoe = null; // Initialize $shoe to null
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = "SELECT * FROM products WHERE id=$id";
-    $result = $conn->query($sql);
+    // Truy vấn để lấy thông tin sản phẩm theo id
+    $sql = "SELECT * FROM product WHERE product_id=?";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        die("Error preparing the SQL query: " . $conn->error);
+    }
+
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $shoe = $result->fetch_assoc();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
+// Xử lý khi form được gửi
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'];
-    $name = $_POST['name'];
-    $price = $_POST['price'];
+    $name = $_POST['name'] ?? '';
+    $price = $_POST['price'] ?? '';
+    $description = $_POST['description'] ?? '';
 
-    // Xử lý upload ảnh mới
-    $target_dir = "../images/";
-    $imageFileType = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
-    $timestamp = time();
-    $new_filename = "giay_" . $timestamp . "." . $imageFileType;
-    $target_file = $target_dir . $new_filename;
+    $update_fields = [];
+    $params = [];
+    $types = "";
 
-    // Kiểm tra kích thước file (giới hạn 5MB)
-    if ($_FILES["image"]["size"] > 5 * 1024 * 1024) {
-        echo "Sorry, your file is too large.";
-        exit();
+    // Kiểm tra từng trường dữ liệu
+    if (!empty($name)) {
+        $update_fields[] = "product_name=?";
+        $params[] = $name;
+        $types .= "s";
     }
 
-    // Cho phép chỉ các định dạng ảnh được phép
-    $allowed_formats = array("jpg", "jpeg", "png", "gif");
-    if (!in_array($imageFileType, $allowed_formats)) {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-        exit();
+    if (!empty($price)) {
+        $update_fields[] = "price=?";
+        $params[] = $price;
+        $types .= "s";
     }
 
-    // Di chuyển và lưu trữ file vào thư mục
-    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-        // Xóa tệp ảnh cũ (nếu có)
-        if (file_exists("../" . $shoe['image'])) {
-            unlink("../" . $shoe['image']);
+    if (!empty($description)) {
+        $update_fields[] = "description=?";
+        $params[] = $description;
+        $types .= "s";
+    }
+
+    $new_image_path = "";
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+        $target_dir = "../assets/images/";
+        $imageFileType = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
+        $timestamp = time();
+        $new_filename = "giay_" . $timestamp . "." . $imageFileType;
+        $target_file = $target_dir . $new_filename;
+
+        // Kiểm tra kích thước file
+        if ($_FILES["image"]["size"] > 5 * 1024 * 1024) {
+            echo "Sorry, your file is too large.";
+            exit();
         }
 
-        // Lưu tên tệp ảnh mới trong cơ sở dữ liệu
-        $new_image_path = "images/" . $new_filename;
-        $sql = "UPDATE products SET name='$name', price='$price', image='$new_image_path' WHERE id=$id";
-        if ($conn->query($sql) === TRUE) {
-            header("Location: admin.php");
+        // Kiểm tra định dạng file ảnh hợp lệ
+        $allowed_formats = ["jpg", "jpeg", "png", "gif"];
+        if (!in_array($imageFileType, $allowed_formats)) {
+            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            exit();
+        }
+
+        // Di chuyển file ảnh
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+            // Xóa ảnh cũ nếu có
+            $old_image_path = "../" . $shoe['image_url']; // Get the current image path
+            if (file_exists($old_image_path)) {
+                unlink($old_image_path); // Delete the old image if it exists
+            }
+            $new_image_path = $new_filename;
+            $update_fields[] = "image_url=?";
+            $params[] = $new_image_path;
+            $types .= "s";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+            exit();
+        }
+    }
+
+    // Thêm id vào tham số cuối
+    if (!empty($update_fields)) {
+        $params[] = $id;
+        $types .= "i";
+        $sql = "UPDATE product SET " . implode(", ", $update_fields) . " WHERE product_id=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param($types, ...$params);
+
+        if ($stmt->execute()) {
+            $_SESSION['message'] = "Product updated successfully.";
+            header("Location: manager_product");
             exit();
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "Error: " . $stmt->error;
         }
     } else {
-        echo "Sorry, there was an error uploading your file.";
-        exit();
+        echo "No updates were made.";
     }
 }
 ?>
@@ -69,36 +115,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Shoe</title>
-    <link rel="stylesheet" href="../css/styles_admin.css">
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="admin-container">
+    <div class="container mt-5">
         <h2>Edit Shoe</h2>
-        <form action="update.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?php echo $shoe['id']; ?>">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" value="<?php echo $shoe['name']; ?>" required>
+        <form action="update" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($shoe['product_id']); ?>">
+            
+            <!-- Name Field -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" value="<?php echo htmlspecialchars($shoe['product_name']); ?>">
             </div>
-            <div class="form-group">
-                <label for="price">Price:</label>
-                <input type="text" id="price" name="price" value="<?php echo $shoe['price']; ?>" required>
+
+            <!-- Price Field -->
+            <div class="mb-3">
+                <label for="price" class="form-label">Price:</label>
+                <input type="text" id="price" name="price" class="form-control" value="<?php echo htmlspecialchars($shoe['price']); ?>">
             </div>
-            <div class="form-group">
-                <label for="current-image">Current Image:</label><br>
-                <img src="../<?php echo $shoe['image']; ?>" alt="Current Image" width="150">
+
+            <!-- Description Field -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <textarea id="description" name="description" class="form-control" rows="4"><?php echo htmlspecialchars($shoe['description']); ?></textarea>
             </div>
-            <div class="form-group">
-                <label for="image">New Image:</label>
-                <input type="file" id="image" name="image" accept="image/*">
+
+            <!-- Current Image -->
+            <div class="mb-3">
+                <label for="current-image" class="form-label">Current Image:</label><br>
+                <img src="./assets/images/<?php echo htmlspecialchars($shoe['image_url']); ?>" alt="Current Image" width="150">
             </div>
-            <button type="submit">Update Shoe</button>
+
+            <!-- New Image Upload -->
+            <div class="mb-3">
+                <label for="image" class="form-label">New Image (Optional):</label>
+                <input type="file" id="image" name="image" class="form-control" accept="image/*">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Update Shoe</button>
         </form>
     </div>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 
-
-<?php
-$conn->close();
-?>
+<?php include '../includes/footer.php'; ?>
