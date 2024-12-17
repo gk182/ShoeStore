@@ -6,7 +6,10 @@ include 'header_admin.php';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'staff') {
+    header("Location: home");
+    exit();
+}
 // Xử lý thay đổi trạng thái
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['status'])) {
     $order_id = intval($_POST['order_id']);
@@ -73,7 +76,7 @@ if ($stmt = $conn->prepare($sql_orders)) {
 // Hàm lấy thông tin chi tiết đơn hàng
 function getOrderDetails($order_id, $conn) {
     $sql_details = "
-        SELECT od.quantity, od.price, p.product_name, s.size_id
+        SELECT od.quantity, od.price, p.product_name, s.size
         FROM order_detail od
         JOIN product p ON od.product_id = p.product_id
         JOIN size s ON od.size_id = s.size_id
@@ -177,7 +180,7 @@ function getOrderDetails($order_id, $conn) {
                                                             <?php foreach ($details as $detail): ?>
                                                                 <tr>
                                                                     <td><?= htmlspecialchars($detail['product_name']) ?></td>
-                                                                    <td><?= htmlspecialchars($detail['size_id']) ?></td>
+                                                                    <td><?= htmlspecialchars($detail['size']) ?></td>
                                                                     <td><?= htmlspecialchars($detail['quantity']) ?></td>
                                                                     <td><?= htmlspecialchars($detail['price']) ?> VND</td>
                                                                 </tr>
