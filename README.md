@@ -22,10 +22,6 @@ Clone repository từ GitHub:
 git clone https://github.com/gk182/ShoeStore.git
    ```
 
-Dưới đây là phần README.md cho các bước Cấu hình cơ sở dữ liệu và Cấu hình XAMPP như bạn yêu cầu:
-
-markdown
-Sao chép mã
 ### 3. Cấu hình cơ sở dữ liệu
 
 1. Mở **phpMyAdmin** qua URL `http://localhost/phpmyadmin` trong trình duyệt.
